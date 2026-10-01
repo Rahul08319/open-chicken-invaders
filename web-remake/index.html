@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chicken Invaders: Realspace Assault</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="machine-shell">
+      <header class="topbar" aria-label="Application controls">
+        <div class="brand-lockup">
+          <span class="brand-mark">BR</span>
+          <div>
+            <p class="eyebrow">Standalone remix lab</p>
+            <h1>PhonkMachine BR</h1>
+          </div>
+        </div>
+        <div class="transport" aria-label="Transport controls">
+          <button class="icon-button" id="play-btn" type="button" aria-label="Play preview" title="Play preview">
+            <span id="play-icon">▶</span>
+          </button>
+          <button class="icon-button" id="stop-btn" type="button" aria-label="Stop preview" title="Stop preview">■</button>
+          <button class="primary-button" id="convert-btn" type="button">Convert to Phonk</button>
+          <button class="secondary-button" id="export-btn" type="button">Export WAV</button>
+        </div>
+      </header>
+
+      <section class="status-strip" aria-label="Song analysis">
+        <div>
+          <span>BPM</span>
+          <strong id="bpm-readout">--</strong>
+        </div>
+        <div>
+          <span>Target</span>
+          <strong id="target-readout">90</strong>
+        </div>
+        <div>
+          <span>Key</span>
+          <strong id="key-readout">--</strong>
+        </div>
+        <div>
+          <span>Energy</span>
+          <strong id="energy-readout">--</strong>
+        </div>
+        <div class="progress-cell">
+          <span id="analysis-label">Ready for audio</span>
+          <div class="progress-track"><i id="analysis-progress"></i></div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="left-rail" aria-label="Input and stems">
+          <label class="drop-zone" id="drop-zone">
+            <input id="audio-input" type="file" accept="audio/*" />
+            <span class="drop-icon">+</span>
+            <strong id="file-title">Drop or choose a song</strong>
+            <small>MP3, WAV, FLAC, AIFF, OGG</small>
+          </label>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Stem Control</h2>
+              <button class="mini-button" id="separate-btn" type="button">Separate</button>
+            </div>
+            <label class="fader">
+              <span>Sample</span>
+              <input id="sample-level" type="range" min="0" max="100" value="70" />
+              <b id="sample-level-value">70</b>
+            </label>
+            <label class="fader">
+              <span>Vocals</span>
+              <input id="vocal-level" type="range" min="0" max="100" value="55" />
+              <b id="vocal-level-value">55</b>
+            </label>
+            <label class="fader">
+              <span>Drums</span>
+              <input id="drum-level" type="range" min="0" max="100" value="82" />
+              <b id="drum-level-value">82</b>
+            </label>
+            <label class="fader">
+              <span>808</span>
+              <input id="bass-level" type="range" min="0" max="100" value="78" />
+              <b id="bass-level-value">78</b>
+            </label>
+          </section>
+
+          <section class="panel">
+            <h2>Tempo</h2>
+            <label class="control-row">
+              <span>Target BPM</span>
+              <input id="target-bpm" type="range" min="80" max="100" value="90" />
+            </label>
+            <label class="control-row">
+              <span>Phonk Slow</span>
+              <input id="slow-mode" type="checkbox" checked />
+            </label>
+            <label class="control-row">
+              <span>Tape Stop</span>
+              <input id="tape-stop" type="checkbox" />
+            </label>
+          </section>
+        </aside>
+
+        <section class="center-stage" aria-label="Pattern editor">
+          <section class="waveform-panel">
+            <div class="waveform-head">
+              <div>
+                <h2>Waveform Overview</h2>
+                <p id="waveform-note">Load a song to draw its shape.</p>
+              </div>
+              <button class="mini-button" id="ab-btn" type="button">A/B</button>
+            </div>
+            <canvas id="waveform" width="1200" height="270" aria-label="Waveform display"></canvas>
+          </section>
+
+          <section class="sequencer-panel">
+            <div class="panel-head">
+              <h2>Cowbell Pattern Sequencer</h2>
+              <select id="pattern-select" aria-label="Cowbell pattern">
+                <option value="classic">Classic Morro</option>
+                <option value="rio">Rio Bounce</option>
+                <option value="sp">SP Underground</option>
+                <option value="baile">Baile Drift</option>
+              </select>
+            </div>
+            <div class="step-grid" id="cowbell-grid" aria-label="Cowbell sequencer"></div>
+            <div class="panel-head lower-head">
+              <h2>808 Bass Pattern</h2>
+              <div class="segmented" aria-label="Bass mode">
+                <button type="button" class="active" data-bass-mode="sync">Sync</button>
+                <button type="button" data-bass-mode="glide">Glide</button>
+              </div>
+            </div>
+            <div class="step-grid bass-grid" id="bass-grid" aria-label="808 bass sequencer"></div>
+          </section>
+        </section>
+
+        <aside class="right-rail" aria-label="FX rack and export">
+          <section class="panel preset-panel">
+            <h2>Brazilian Phonk Presets</h2>
+            <div class="preset-list" id="preset-list">
+              <button type="button" class="active" data-preset="classic">Classic Morro</button>
+              <button type="button" data-preset="rio">Rio Bounce</button>
+              <button type="button" data-preset="sp">SP Underground</button>
+              <button type="button" data-preset="baile">Baile Drift</button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>FX Rack</h2>
+            <label class="fader">
+              <span>Vinyl Wear</span>
+              <input id="vinyl" type="range" min="0" max="100" value="46" />
+              <b id="vinyl-value">46</b>
+            </label>
+            <label class="fader">
+              <span>Tape Saturation</span>
+              <input id="saturation" type="range" min="0" max="100" value="62" />
+              <b id="saturation-value">62</b>
+            </label>
+            <label class="fader">
+              <span>Reverb</span>
+              <input id="reverb" type="range" min="0" max="100" value="28" />
+              <b id="reverb-value">28</b>
+            </label>
+            <label class="fader">
+              <span>Stutter</span>
+              <input id="stutter" type="range" min="0" max="100" value="34" />
+              <b id="stutter-value">34</b>
+            </label>
+          </section>
+
+          <section class="panel export-panel">
+            <h2>Export Module</h2>
+            <div class="meter" aria-label="Master loudness meter">
+              <i id="master-meter"></i>
+            </div>
+            <div class="export-options">
+              <label><input type="radio" name="format" checked /> WAV 24-bit</label>
+              <label><input type="radio" name="format" /> MP3 320k</label>
+              <label><input id="stem-export" type="checkbox" /> Export stems</label>
+            </div>
+            <p id="export-status">Render creates a short preview loop from the current pattern.</p>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <script src="./ytgame-bridge.js"></script>
+    <script src="./realspace-game.js"></script>
+  </body>
+</html>
+
