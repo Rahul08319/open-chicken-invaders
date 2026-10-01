@@ -9,3 +9,7 @@ Migrated to github from sourceforge:
 https://sourceforge.net/projects/open-chicken-invaders/
 
 ![ScreenShot3](https://github.com/konovalov-aleks/open-chicken-invaders/assets/11459433/2a0e71ff-01d4-4ee1-bd7f-6854ed3c5c87)
+
+## Browser remake
+
+A playable, canvas-rendered browser version is available in [`web-remake/`](web-remake/). Open [`web-remake/index.html`](web-remake/index.html) to run it. The browser build includes mouse, touch, and keyboard controls and uses procedural space and spacecraft visuals.
