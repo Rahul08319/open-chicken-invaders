@@ -908,6 +908,6 @@
     spriteAtlasReady = true;
     render();
   };
-  spriteAtlas.src = "./assets/spacecraft-atlas.png";
+  spriteAtlas.src = window.spacecraftAtlasData || "./assets/spacecraft-atlas.png";
 })();
 
