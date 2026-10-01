@@ -1,14 +1,15 @@
 # Chicken Invaders: Realspace Assault
 
-A standalone browser arcade remake with metallic spacecraft, enemies, projectiles, and a procedural deep-space scene. All game visuals are drawn on canvas; no external image assets are required.
+A standalone browser arcade remake with a generated, transparent spacecraft sprite atlas and original Chicken Invaders-inspired wave gameplay.
 
 ## Play
 
-Open `index.html` in a modern browser, or serve this folder with a static web server.
+Open `index.html` in a modern browser. Click **Launch Sortie** to begin.
 
-- Move with mouse or touch inside the play area.
-- Use `WASD` or the arrow keys for keyboard movement.
-- Trigger the EMP bomb with `Space` or the on-screen EMP button.
-- Press `F` to toggle fullscreen.
+- Move with the mouse or touch, or use WASD / arrow keys.
+- Fire is automatic while playing.
+- Use Space or the EMP button to clear threats.
+- Press F for fullscreen; use Restart to begin again.
 
-Choose **Launch Sortie** to start, and use **Restart** to start again.
+All art is local in `assets/spacecraft-atlas.png`; no remote image service is required at runtime.
+

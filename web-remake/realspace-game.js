@@ -43,6 +43,14 @@
 
   const canvas = document.getElementById("game-canvas");
   const ctx = canvas.getContext("2d");
+  const spriteAtlas = new Image();
+  let spriteAtlasReady = false;
+  const spriteRegions = {
+    player: { x: 0, y: 0, width: 648, height: 607 },
+    enemy: { x: 648, y: 0, width: 647, height: 607 },
+    boss: { x: 0, y: 607, width: 960, height: 607 },
+    projectile: { x: 960, y: 607, width: 335, height: 607 },
+  };
   const els = {
     score: document.getElementById("score-value"),
     lives: document.getElementById("lives-value"),
@@ -367,7 +375,7 @@
     ctx.save();
     if (p.invulnerable > 0 && Math.floor(state.time * 16) % 2 === 0) ctx.globalAlpha = 0.55;
     drawGlow(p.x, p.y + 55, 62, "rgba(255,154,90,0.28)");
-    drawRealisticShip(p.x, p.y, state.time);
+    if (!drawAtlasSprite("player", p.x, p.y, 166, 174)) drawRealisticShip(p.x, p.y, state.time);
     if (p.shield > 0) {
       ctx.strokeStyle = "rgba(126, 237, 255, 0.9)";
       ctx.lineWidth = 3;
@@ -579,6 +587,7 @@
   }
 
   function drawCombatDrone(x, y, scale, phase) {
+    if (drawAtlasSprite("enemy", x, y, 138 * scale, 124 * scale)) return;
     ctx.save();
     ctx.translate(x, y + Math.sin(phase * 4) * 2);
     ctx.scale(scale, scale);
@@ -655,6 +664,7 @@
   }
 
   function drawBossDrone(x, y, healthRatio) {
+    if (drawAtlasSprite("boss", x, y, 248, 174)) return;
     ctx.save();
     ctx.translate(x, y);
     drawGlow(0, 18, 138, "rgba(255, 115, 56, 0.2)");
@@ -708,6 +718,7 @@
   }
 
   function drawPlasmaPod(x, y, r) {
+    if (drawAtlasSprite("projectile", x, y, r * 2.8, r * 3.2)) return;
     ctx.save();
     ctx.translate(x, y);
     const trail = ctx.createLinearGradient(0, -r * 4, 0, 0);
@@ -760,6 +771,17 @@
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
+  }
+
+  function drawAtlasSprite(name, x, y, width, height) {
+    const region = spriteRegions[name];
+    if (!spriteAtlasReady || !region) return false;
+    ctx.drawImage(
+      spriteAtlas,
+      region.x, region.y, region.width, region.height,
+      x - width / 2, y - height / 2, width, height
+    );
+    return true;
   }
 
   function roundRect(x, y, w, h, r, fillStyle) {
@@ -882,5 +904,10 @@
   window.ytgame?.game?.firstFrameReady?.();
   window.ytgame?.game?.gameReady?.();
   requestAnimationFrame(frame);
+  spriteAtlas.onload = () => {
+    spriteAtlasReady = true;
+    render();
+  };
+  spriteAtlas.src = "./assets/spacecraft-atlas.png";
 })();
 
